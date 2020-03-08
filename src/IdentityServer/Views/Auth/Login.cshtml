@@ -1,0 +1,25 @@
+﻿@model LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Login Page</h1>
+
+<form method="post" asp-action="Login" asp-controller="Auth">
+    <input type="hidden" asp-for="ReturnUrl" />
+    <div>
+        <label>UserName </label>
+        <input type="text" asp-for="UserName" />
+    </div>
+    <div>
+        <label>Password </label>
+        <input type="text" asp-for="PassWord" />
+    </div>
+    <button type="submit">Sign In</button>
+</form>
+<div>
+
+    <a asp-action="Register" asp-controller="Auth" asp-route-returnUrl="@Model.ReturnUrl">Register</a>
+</div>
+
