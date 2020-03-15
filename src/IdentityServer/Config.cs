@@ -49,7 +49,7 @@ namespace IdentityServer
                 },
                 // puts all the claims id_token.
                 //AlwaysIncludeUserClaimsInIdToken=true,
-                RedirectUris={ "http://localhost:11287/signin-oidc" }
+                RedirectUris={ "http://localhost:5001/signin-oidc" }
             }
         };
     }

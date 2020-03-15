@@ -35,7 +35,7 @@ namespace IdentityServer.Controllers
             {
 
             }
-            return View();
+            return View(model);
         }
         public async Task<IActionResult> Register(string returnUrl)
         {

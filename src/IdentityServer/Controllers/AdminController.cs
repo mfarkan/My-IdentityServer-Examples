@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityServer.Controllers
 {
+    // TODO : this controller must be authorize by SuperAdmin policy!
     [Authorize]
     public class AdminController : Controller
     {

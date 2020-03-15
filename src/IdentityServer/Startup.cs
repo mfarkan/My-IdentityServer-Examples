@@ -3,6 +3,7 @@ using IdentityServer.Describer;
 using IdentityServer.Resources;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
@@ -46,6 +47,7 @@ namespace IdentityServer
             {
                 config.Cookie.Name = "IdentityServer.Cookie";
                 config.LoginPath = "/Auth/Login";
+                config.Cookie.SameSite = SameSiteMode.Unspecified;
             });
             services.AddAuthorization(option =>
             {

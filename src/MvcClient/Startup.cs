@@ -34,7 +34,7 @@ namespace MvcClient
             }).AddCookie("Cookie").AddOpenIdConnect("oidc", config =>
              {
                  config.ClientId = "Client_Id_Mvc";
-                 config.Authority = "http://localhost:16855/";
+                 config.Authority = "http://localhost:5000/";
                  config.ClientSecret = "client_secret_mvc";
                  config.SaveTokens = true;
                  config.RequireHttpsMetadata = false;
