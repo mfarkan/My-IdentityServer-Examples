@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -28,6 +29,10 @@ namespace MvcClient.Controllers
         public async Task<IActionResult> Privacy()
         {
             var token = await HttpContext.GetTokenAsync("access_token");
+            var idToken = await HttpContext.GetTokenAsync("id_token");
+
+            var id_Token = new JwtSecurityTokenHandler().ReadJwtToken(idToken);
+            var access_token = new JwtSecurityTokenHandler().ReadJwtToken(token);
             return View(token);
         }
 

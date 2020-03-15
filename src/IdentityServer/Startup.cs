@@ -1,16 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using IdentityServer.Data;
+using IdentityServer.Describer;
+using IdentityServer.Resources;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace IdentityServer
 {
@@ -39,21 +40,40 @@ namespace IdentityServer
                 config.Password.RequireLowercase = false;
 
             }).AddEntityFrameworkStores<AppDbContext>()
-                .AddDefaultTokenProviders();
+                .AddDefaultTokenProviders().AddErrorDescriber<CustomErrorDescriber>();
 
             services.ConfigureApplicationCookie(config =>
             {
                 config.Cookie.Name = "IdentityServer.Cookie";
                 config.LoginPath = "/Auth/Login";
             });
-
-            services.AddControllersWithViews();
+            services.AddAuthorization(option =>
+            {
+                option.AddPolicy("SuperAdmin", policy =>
+                {
+                    policy.RequireClaim("Admin", "true");
+                });
+            });
             services.AddIdentityServer()
                 .AddInMemoryApiResources(Config.GetApis())
                 .AddAspNetIdentity<IdentityUser>()
                 .AddInMemoryClients(Config.GetClients())
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddDeveloperSigningCredential();
+
+            services.AddControllersWithViews(option =>
+            option.Filters.Add(new AutoValidateAntiforgeryTokenAttribute())).AddDataAnnotationsLocalization(o =>
+            {
+                o.DataAnnotationLocalizerProvider = (type, factory) =>
+                {
+                    return factory.Create(typeof(SharedResource));
+                };
+            }).AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix);
+            services.AddLocalization(o =>
+            {
+                o.ResourcesPath = "Resources";
+            });
+            services.AddAntiforgery(option => option.HeaderName = "X-XSRF-Token");
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -65,10 +85,20 @@ namespace IdentityServer
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-            app.UseStaticFiles();
 
             app.UseRouting();
 
+            var supportedCultures = new List<CultureInfo> { new CultureInfo("tr-TR"), new CultureInfo("en-US") };
+
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("tr-TR"),
+                SupportedUICultures = supportedCultures,
+                SupportedCultures = supportedCultures,
+                RequestCultureProviders = new[] { new CookieRequestCultureProvider() },
+            });
+
+            app.UseStaticFiles();
             // middleware added to startup.
             app.UseIdentityServer();
 

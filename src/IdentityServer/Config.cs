@@ -14,6 +14,14 @@ namespace IdentityServer
             {
                 new  IdentityResources.OpenId(),
                 new  IdentityResources.Profile(),
+                new IdentityResource
+                {
+                    Name="rc.scope",
+                    UserClaims =
+                    {
+                        "basic.claim"
+                    }
+                }
             };
         public static IEnumerable<ApiResource> GetApis() => new List<ApiResource> { new ApiResource("apiOne"),
             new ApiResource("apiTwo") };
@@ -36,9 +44,12 @@ namespace IdentityServer
                     IdentityServer4.IdentityServerConstants.StandardScopes.OpenId,
                     "apiOne",
                     "apiTwo",
+                    "rc.scope",
                     IdentityServer4.IdentityServerConstants.StandardScopes.Profile
                 },
-                RedirectUris={"https://localhost:44360/signin-oidc"}
+                // puts all the claims id_token.
+                //AlwaysIncludeUserClaimsInIdToken=true,
+                RedirectUris={ "http://localhost:11287/signin-oidc" }
             }
         };
     }

@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -37,6 +39,13 @@ namespace MvcClient
                  config.SaveTokens = true;
                  config.RequireHttpsMetadata = false;
                  config.ResponseType = "code";
+                 config.ClaimActions.DeleteClaim("s_hash");
+                 config.ClaimActions.DeleteClaim("amr");
+                 config.ClaimActions.MapUniqueJsonKey("basic.claim", "basic.claim");
+                 //load claims in to the cookie 
+                 // but the id token is smaller.
+                 config.GetClaimsFromUserInfoEndpoint = true;
+                 config.Scope.Add("rc.scope");
              });
         }
 
