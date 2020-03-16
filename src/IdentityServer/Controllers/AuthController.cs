@@ -10,7 +10,8 @@ namespace IdentityServer.Controllers
 {
     public class AuthController : Controller
     {
-        public AuthController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public AuthController(UserManager<IdentityUser> userManager, 
+        SignInManager<IdentityUser> signInManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;

@@ -4,7 +4,6 @@ using IdentityServer.Helpers;
 using IdentityServer.Resources;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +31,6 @@ namespace IdentityServer
             {
                 config.UseInMemoryDatabase("Memory");
             });
-
             services.AddIdentity<IdentityUser, IdentityRole>(config =>
             {
                 config.Password.RequiredLength = 4;
@@ -40,10 +38,8 @@ namespace IdentityServer
                 config.Password.RequireNonAlphanumeric = false;
                 config.Password.RequireUppercase = false;
                 config.Password.RequireLowercase = false;
-
             }).AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders().AddErrorDescriber<CustomErrorDescriber>();
-
             services.ConfigureApplicationCookie(config =>
             {
                 config.Cookie.Name = "IdentityServer.Cookie";
@@ -62,7 +58,6 @@ namespace IdentityServer
                 .AddInMemoryClients(Config.GetClients())
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddDeveloperSigningCredential();
-
             services.AddControllersWithViews(option =>
             {
                 option.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
@@ -80,6 +75,7 @@ namespace IdentityServer
                 o.ResourcesPath = "Resources";
             });
             services.AddAntiforgery(option => option.HeaderName = "X-XSRF-Token");
+            services.AddHttpContextAccessor();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -91,7 +87,6 @@ namespace IdentityServer
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
             app.UseRouting();
 
             var supportedCultures = new List<CultureInfo> { new CultureInfo("tr-TR"), new CultureInfo("en-US") };
@@ -103,11 +98,11 @@ namespace IdentityServer
                 SupportedCultures = supportedCultures,
                 RequestCultureProviders = new[] { new CookieRequestCultureProvider() },
             });
-
             app.UseStaticFiles();
+            app.UseAuthentication();
+            app.UseAuthorization();
             // middleware added to startup.
             app.UseIdentityServer();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
