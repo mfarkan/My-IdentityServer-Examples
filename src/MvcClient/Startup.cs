@@ -34,7 +34,7 @@ namespace MvcClient
             }).AddCookie("Cookie").AddOpenIdConnect("oidc", config =>
              {
                  config.ClientId = "Client_Id_Mvc";
-                 config.Authority = "http://localhost:5000/";
+                 config.Authority = "https://localhost:5000/";
                  config.ClientSecret = "client_secret_mvc";
                  config.SaveTokens = true;
                  config.RequireHttpsMetadata = false;
@@ -62,6 +62,7 @@ namespace MvcClient
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();

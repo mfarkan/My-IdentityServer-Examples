@@ -10,7 +10,7 @@ namespace IdentityServer.Controllers
 {
     public class AuthController : Controller
     {
-        public AuthController(UserManager<IdentityUser> userManager, 
+        public AuthController(UserManager<IdentityUser> userManager,
         SignInManager<IdentityUser> signInManager)
         {
             _signInManager = signInManager;
@@ -19,9 +19,9 @@ namespace IdentityServer.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public async Task<IActionResult> Login(string returnUrl)
+        public IActionResult Login(string returnUrl)
         {
-            return await Task.Run(() => View(new LoginViewModel { ReturnUrl = returnUrl }));
+            return View(new LoginViewModel { ReturnUrl = returnUrl });
         }
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
