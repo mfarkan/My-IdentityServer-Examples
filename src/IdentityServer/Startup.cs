@@ -1,5 +1,6 @@
 using IdentityServer.Data;
 using IdentityServer.Describer;
+using IdentityServer.Helpers;
 using IdentityServer.Resources;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -47,7 +48,6 @@ namespace IdentityServer
             {
                 config.Cookie.Name = "IdentityServer.Cookie";
                 config.LoginPath = "/Auth/Login";
-                config.Cookie.SameSite = SameSiteMode.Unspecified;
             });
             services.AddAuthorization(option =>
             {
@@ -64,7 +64,11 @@ namespace IdentityServer
                 .AddDeveloperSigningCredential();
 
             services.AddControllersWithViews(option =>
-            option.Filters.Add(new AutoValidateAntiforgeryTokenAttribute())).AddDataAnnotationsLocalization(o =>
+            {
+                option.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                option.Filters.Add(new SecurityHeadersAttribute());
+            }
+            ).AddDataAnnotationsLocalization(o =>
             {
                 o.DataAnnotationLocalizerProvider = (type, factory) =>
                 {

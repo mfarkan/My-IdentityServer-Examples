@@ -9,9 +9,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/IdentityServer/bin/Debug/netcoreapp3.1/IdentityServer.dll",
+            "program": "${workspaceFolder}/src/IdentityServer/bin/Debug/netcoreapp3.1/IdentityServer.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/IdentityServer",
+            "cwd": "${workspaceFolder}/src/IdentityServer",
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",
@@ -29,9 +29,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/MvcClient/bin/Debug/netcoreapp3.1/MvcClient.dll",
+            "program": "${workspaceFolder}/src/MvcClient/bin/Debug/netcoreapp3.1/MvcClient.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/MvcClient",
+            "cwd": "${workspaceFolder}/src/MvcClient",
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",

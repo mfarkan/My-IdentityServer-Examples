@@ -49,7 +49,8 @@ namespace IdentityServer.Controllers
                 return await Task.Run(() => View(model));
             }
             var user = new IdentityUser(model.UserName);
-            var result = await _userManager.CreateAsync(user, model.Password);
+            user.Email = model.Email;
+            var result = await _userManager.CreateAsync(user, model.PassWord);
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(user, false);
