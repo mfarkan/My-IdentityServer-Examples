@@ -1,11 +1,26 @@
-﻿@model LoginViewModel
+﻿@using System.Threading;
+@model LoginViewModel
 @{
     ViewData["Title"] = viewLocalizer["SignInPageTitle"];
     Layout = "~/Views/Shared/_signInLayout.cshtml";
+    string culture = Thread.CurrentThread.CurrentUICulture.ToString();
 }
 <title>@ViewData["Title"]</title>
 <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
 <div class="col-lg-6">
+        <form asp-controller="Auth" class="text-right" asp-action="SetCulture">
+            <input type="hidden" name="returnUrl" value="@(Context.Request.Path)@(Context.Request.QueryString.ToUriComponent())" />
+            @if (culture != "tr-TR")
+            {
+                <input type="hidden" name="culture" value="tr-TR" />
+                <button type="submit" class="btn font-weight-bold">Türkçe</button>
+            }
+            else
+            {
+                <input type="hidden" name="culture" value="en-US" />
+                <button type="submit" class="btn font-weight-bold">English</button>
+            }
+        </form>
     <div class="p-5">
         <div class="text-center">
             <h1 class="h4 text-gray-900 mb-4">@viewLocalizer["LoginText"]</h1>

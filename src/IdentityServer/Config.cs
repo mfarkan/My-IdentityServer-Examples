@@ -47,6 +47,8 @@ namespace IdentityServer
                     "rc.scope",
                     IdentityServer4.IdentityServerConstants.StandardScopes.Profile
                 },
+                // getting refresh token for this client and added for client infos.
+                //AllowOfflineAccess=true,
                 // puts all the claims id_token.
                 //AlwaysIncludeUserClaimsInIdToken=true,
                 RedirectUris={ "https://localhost:5001/signin-oidc" }

@@ -46,6 +46,7 @@ namespace MvcClient
                  // but the id token is smaller.
                  config.GetClaimsFromUserInfoEndpoint = true;
                  config.Scope.Add("rc.scope");
+                 //config.Scope.Add("offline_access"); for refresh token.
              });
         }
 

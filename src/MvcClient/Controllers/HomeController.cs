@@ -33,6 +33,7 @@ namespace MvcClient.Controllers
 
             var id_Token = new JwtSecurityTokenHandler().ReadJwtToken(idToken);
             var access_token = new JwtSecurityTokenHandler().ReadJwtToken(token);
+            var refresh_token = await HttpContext.GetTokenAsync("refresh_token");
             return View(token);
         }
 
