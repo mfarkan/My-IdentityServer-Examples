@@ -37,6 +37,10 @@ namespace IdentityServer.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
             //check the model is valid.
             var result = await _signInManager.PasswordSignInAsync(model.UserName, model.PassWord, false, false);
             if (result.Succeeded)
@@ -49,19 +53,21 @@ namespace IdentityServer.Controllers
             }
             return View(model);
         }
-        public async Task<IActionResult> Register(string returnUrl)
+        public IActionResult Register(string returnUrl)
         {
-            return await Task.Run(() => View(new RegisterViewModel { ReturnUrl = returnUrl }));
+            return View(new RegisterViewModel { ReturnUrl = returnUrl });
         }
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                return await Task.Run(() => View(model));
+                return View(model);
             }
-            var user = new IdentityUser(model.UserName);
-            user.Email = model.Email;
+            var user = new IdentityUser(model.UserName)
+            {
+                Email = model.Email
+            };
             var result = await _userManager.CreateAsync(user, model.PassWord);
             if (result.Succeeded)
             {
