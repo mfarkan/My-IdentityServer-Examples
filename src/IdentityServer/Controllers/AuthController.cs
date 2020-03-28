@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using IdentityServer.Models;
+﻿using IdentityServer.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace IdentityServer.Controllers
 {
     public class AuthController : Controller
     {
+
         public AuthController(UserManager<IdentityUser> userManager,
         SignInManager<IdentityUser> signInManager)
         {

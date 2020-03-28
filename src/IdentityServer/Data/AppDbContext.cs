@@ -1,17 +1,20 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using IdentityServer.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace IdentityServer.Data
 {
-    public class AppDbContext : IdentityDbContext
+    public class UserManagementDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        public UserManagementDbContext(DbContextOptions<UserManagementDbContext> options) : base(options)
         {
 
+        }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.HasDefaultSchema("public");
+            base.OnModelCreating(builder);
         }
     }
 }

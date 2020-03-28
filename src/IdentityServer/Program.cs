@@ -1,3 +1,4 @@
+using IdentityServer.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,10 +16,16 @@ namespace IdentityServer
             using (var scope = host.Services.CreateScope())
             {
                 var userManager = scope.ServiceProvider
-                    .GetRequiredService<UserManager<IdentityUser>>();
-                var user = new IdentityUser("fatih");
-                userManager.CreateAsync(user, "password").GetAwaiter().GetResult();
-                userManager.AddClaimAsync(user, new Claim("basic.claim", "big.cookie")).GetAwaiter().GetResult();
+                    .GetRequiredService<UserManager<ApplicationUser>>();
+                var user = new ApplicationUser("5p95zp");
+                var existUser = userManager.FindByNameAsync("5p95zp").GetAwaiter().GetResult();
+                if (existUser == null)
+                {
+                    userManager.CreateAsync(user, "d^yz!*K4Pu@IbKuh").GetAwaiter().GetResult();
+                    userManager.AddClaimAsync(user, new Claim("SuperAdmin", "GodMode"));
+                }
+                //userManager.CreateAsync(user, "password").GetAwaiter().GetResult();
+                //userManager.AddClaimAsync(user, new Claim("basic.claim", "big.cookie")).GetAwaiter().GetResult();
             }
             host.Run();
         }

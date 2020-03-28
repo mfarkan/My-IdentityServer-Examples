@@ -1,6 +1,7 @@
 using IdentityServer.Data;
 using IdentityServer.Describer;
 using IdentityServer.Helpers;
+using IdentityServer.Models;
 using IdentityServer.Resources;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,18 +29,22 @@ namespace IdentityServer
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(config =>
+
+            var migrationAssembly = typeof(Startup).Assembly.GetName().Name;
+
+            services.AddDbContext<UserManagementDbContext>(config =>
             {
-                config.UseInMemoryDatabase("Memory");
+                config.UseNpgsql(Configuration.GetConnectionString("IdServerConnection"));
+                //config.UseInMemoryDatabase("Memory");
             });
-            services.AddIdentity<IdentityUser, IdentityRole>(config =>
+            services.AddIdentity<ApplicationUser, ApplicationRole>(config =>
             {
                 config.Password.RequiredLength = 4;
                 config.Password.RequireDigit = false;
                 config.Password.RequireNonAlphanumeric = false;
                 config.Password.RequireUppercase = false;
                 config.Password.RequireLowercase = false;
-            }).AddEntityFrameworkStores<AppDbContext>()
+            }).AddEntityFrameworkStores<UserManagementDbContext>()
                 .AddDefaultTokenProviders().AddErrorDescriber<CustomErrorDescriber>();
             services.ConfigureApplicationCookie(config =>
             {
@@ -55,11 +60,34 @@ namespace IdentityServer
                 });
             });
             services.AddIdentityServer()
-                .AddInMemoryApiResources(Config.GetApis())
-                .AddAspNetIdentity<IdentityUser>()
-                .AddInMemoryClients(Config.GetClients())
-                .AddInMemoryIdentityResources(Config.GetIdentityResources())
-                .AddDeveloperSigningCredential();
+                    .AddAspNetIdentity<ApplicationUser>()
+                    .AddConfigurationStore(options =>
+                    {
+                        options.DefaultSchema = "public";
+                        options.ConfigureDbContext = db =>
+                         {
+                             db.UseNpgsql(Configuration.GetConnectionString("IdServerConnection"), sql =>
+                              {
+                                  sql.MigrationsAssembly(migrationAssembly);
+                              });
+                         };
+                    }).AddOperationalStore(options =>
+                    {
+                        options.DefaultSchema = "public";
+                        options.ConfigureDbContext = db =>
+                         {
+                             db.UseNpgsql(Configuration.GetConnectionString("IdServerConnection"), sql =>
+                             {
+                                 sql.MigrationsAssembly(migrationAssembly);
+                             });
+                         };
+                    })
+                    .AddDeveloperSigningCredential();
+            //services.AddIdentityServer()
+            //    .AddInMemoryApiResources(Config.GetApis())
+            //    .AddAspNetIdentity<IdentityUser>()
+            //    .AddInMemoryClients(Config.GetClients())
+            //    .AddInMemoryIdentityResources(Config.GetIdentityResources())
             services.AddControllersWithViews(option =>
             {
                 option.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
