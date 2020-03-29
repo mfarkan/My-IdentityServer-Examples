@@ -17,12 +17,16 @@ namespace IdentityServer
             {
                 var userManager = scope.ServiceProvider
                     .GetRequiredService<UserManager<ApplicationUser>>();
-                var user = new ApplicationUser("5p95zp");
-                var existUser = userManager.FindByNameAsync("5p95zp").GetAwaiter().GetResult();
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+                var user = new ApplicationUser("mfa");
+                var existUser = userManager.FindByNameAsync("mfa").GetAwaiter().GetResult();
                 if (existUser == null)
                 {
-                    userManager.CreateAsync(user, "d^yz!*K4Pu@IbKuh").GetAwaiter().GetResult();
-                    userManager.AddClaimAsync(user, new Claim("SuperAdmin", "GodMode"));
+                    ApplicationRole role = new ApplicationRole("GodMode");
+                    roleManager.CreateAsync(role).GetAwaiter().GetResult();
+                    roleManager.AddClaimAsync(role, new Claim("SuperAdmin", "true")).GetAwaiter().GetResult();
+                    userManager.CreateAsync(user, "kbr2626").GetAwaiter().GetResult();
+                    var result = userManager.AddToRoleAsync(user, "GodMode").GetAwaiter().GetResult();
                 }
                 //userManager.CreateAsync(user, "password").GetAwaiter().GetResult();
                 //userManager.AddClaimAsync(user, new Claim("basic.claim", "big.cookie")).GetAwaiter().GetResult();

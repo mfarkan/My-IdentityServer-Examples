@@ -50,13 +50,14 @@ namespace IdentityServer
             {
                 config.Cookie.Name = "IdentityServer.Cookie";
                 config.LoginPath = "/Auth/Login";
+                config.LogoutPath = "/Auth/LogOut";
                 config.ExpireTimeSpan = TimeSpan.FromMinutes(20);
             });
             services.AddAuthorization(option =>
             {
                 option.AddPolicy("SuperAdmin", policy =>
                 {
-                    policy.RequireClaim("Admin", "true");
+                    policy.RequireClaim("SuperAdmin", "true");
                 });
             });
             services.AddIdentityServer()

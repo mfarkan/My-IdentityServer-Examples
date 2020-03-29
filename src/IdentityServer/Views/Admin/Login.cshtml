@@ -10,8 +10,7 @@
         <div class="text-center">
             <h1 class="h4 text-gray-900 mb-4">@viewLocalizer["LoginText"]</h1>
         </div>
-        <form asp-action="Login" autocomplete="off" asp-antiforgery="true" asp-controller="Auth" class="user" autocomplete="off">
-            <input type="hidden" asp-for="ReturnUrl" />
+        <form asp-action="Login" autocomplete="off" asp-antiforgery="true" asp-controller="Admin" class="user">
             <div class="form-group">
                 <div>
                     @Html.LabelFor(model => model.UserName)

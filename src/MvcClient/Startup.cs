@@ -41,6 +41,7 @@ namespace MvcClient
                  config.ResponseType = "code";
                  config.ClaimActions.DeleteClaim("s_hash");
                  config.ClaimActions.DeleteClaim("amr");
+                 config.SignedOutCallbackPath = "/Home/Index";
                  config.ClaimActions.MapUniqueJsonKey("basic.claim", "basic.claim");
                  //load claims in to the cookie 
                  // but the id token is smaller.

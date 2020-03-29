@@ -39,6 +39,7 @@ namespace IdentityServer
                 ClientSecrets={new Secret("client_secret_mvc".ToSha256())},
                 AllowedGrantTypes=GrantTypes.Code,
                 RequireConsent=false,
+                PostLogoutRedirectUris={ "https://localhost:5001/Home/Index" },
                 AllowedScopes=
                 {
                     IdentityServer4.IdentityServerConstants.StandardScopes.OpenId,

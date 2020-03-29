@@ -59,5 +59,59 @@ namespace IdentityServer.Resources.Views.Admin {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create an account!.
+        /// </summary>
+        public static string CreateAnAccount {
+            get {
+                return ResourceManager.GetString("CreateAnAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forgot Password?.
+        /// </summary>
+        public static string ForgotPasswordPage {
+            get {
+                return ResourceManager.GetString("ForgotPasswordPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login with Facebook.
+        /// </summary>
+        public static string LoginFacebook {
+            get {
+                return ResourceManager.GetString("LoginFacebook", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login with Google.
+        /// </summary>
+        public static string LoginGoogle {
+            get {
+                return ResourceManager.GetString("LoginGoogle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Welcome Back!.
+        /// </summary>
+        public static string LoginText {
+            get {
+                return ResourceManager.GetString("LoginText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login!.
+        /// </summary>
+        public static string SignInPageTitle {
+            get {
+                return ResourceManager.GetString("SignInPageTitle", resourceCulture);
+            }
+        }
     }
 }

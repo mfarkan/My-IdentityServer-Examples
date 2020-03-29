@@ -1,4 +1,5 @@
 ﻿using IdentityServer.Models;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
@@ -10,15 +11,17 @@ namespace IdentityServer.Controllers
 {
     public class AuthController : Controller
     {
+        private readonly IIdentityServerInteractionService _interactionService;
 
-        public AuthController(UserManager<IdentityUser> userManager,
-        SignInManager<IdentityUser> signInManager)
+        public AuthController(UserManager<ApplicationUser> userManager,
+        SignInManager<ApplicationUser> signInManager, IIdentityServerInteractionService interactionService)
         {
+            _interactionService = interactionService;
             _signInManager = signInManager;
             _userManager = userManager;
         }
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         public IActionResult SetCulture(string culture, string returnUrl)
         {
             HttpContext.Response.Cookies.Append(
@@ -28,6 +31,16 @@ namespace IdentityServer.Controllers
                );
             return Redirect(returnUrl);
 
+        }
+        public async Task<IActionResult> LogOut(string logOutId)
+        {
+            await _signInManager.SignOutAsync();
+            var logOutRequest = await _interactionService.GetLogoutContextAsync(logOutId);
+            if (string.IsNullOrEmpty(logOutRequest.PostLogoutRedirectUri))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return Redirect(logOutRequest.PostLogoutRedirectUri);
         }
         public IActionResult Login(string returnUrl)
         {
@@ -63,7 +76,7 @@ namespace IdentityServer.Controllers
             {
                 return View(model);
             }
-            var user = new IdentityUser(model.UserName)
+            var user = new ApplicationUser(model.UserName)
             {
                 Email = model.Email
             };
