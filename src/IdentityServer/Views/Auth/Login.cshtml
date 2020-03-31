@@ -8,25 +8,26 @@
 <title>@ViewData["Title"]</title>
 <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
 <div class="col-lg-6">
-        <form asp-controller="Auth" class="text-right" asp-action="SetCulture">
-            <input type="hidden" name="returnUrl" value="@(Context.Request.Path)@(Context.Request.QueryString.ToUriComponent())" />
-            @if (culture != "tr-TR")
-            {
-                <input type="hidden" name="culture" value="tr-TR" />
-                <button type="submit" class="btn font-weight-bold">Türkçe</button>
-            }
-            else
-            {
-                <input type="hidden" name="culture" value="en-US" />
-                <button type="submit" class="btn font-weight-bold">English</button>
-            }
-        </form>
+    <form asp-controller="Auth" class="text-right" asp-action="SetCulture">
+        <input type="hidden" name="returnUrl" value="@(Context.Request.Path)@(Context.Request.QueryString.ToUriComponent())" />
+        @if (culture != "tr-TR")
+        {
+            <input type="hidden" name="culture" value="tr-TR" />
+            <button type="submit" class="btn font-weight-bold">Türkçe</button>
+        }
+        else
+        {
+            <input type="hidden" name="culture" value="en-US" />
+            <button type="submit" class="btn font-weight-bold">English</button>
+        }
+    </form>
     <div class="p-5">
         <div class="text-center">
             <h1 class="h4 text-gray-900 mb-4">@viewLocalizer["LoginText"]</h1>
         </div>
         <form asp-action="Login" autocomplete="off" asp-antiforgery="true" asp-controller="Auth" class="user" autocomplete="off">
             <input type="hidden" asp-for="ReturnUrl" />
+            <div asp-validation-summary="All"></div>
             <div class="form-group">
                 <div>
                     @Html.LabelFor(model => model.UserName)

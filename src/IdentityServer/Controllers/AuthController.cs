@@ -1,9 +1,11 @@
 ﻿using IdentityServer.Models;
+using IdentityServer.Resources;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Threading.Tasks;
 
@@ -11,10 +13,9 @@ namespace IdentityServer.Controllers
 {
     public class AuthController : Controller
     {
-        private readonly IIdentityServerInteractionService _interactionService;
-
         public AuthController(UserManager<ApplicationUser> userManager,
-        SignInManager<ApplicationUser> signInManager, IIdentityServerInteractionService interactionService)
+        SignInManager<ApplicationUser> signInManager,
+        IIdentityServerInteractionService interactionService)
         {
             _interactionService = interactionService;
             _signInManager = signInManager;
@@ -22,6 +23,8 @@ namespace IdentityServer.Controllers
         }
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IIdentityServerInteractionService _interactionService;
+        private readonly IStringLocalizer<SharedResource> _localizer;
         public IActionResult SetCulture(string culture, string returnUrl)
         {
             HttpContext.Response.Cookies.Append(
@@ -53,16 +56,24 @@ namespace IdentityServer.Controllers
             {
                 return View(model);
             }
-            //check the model is valid.
-            var result = await _signInManager.PasswordSignInAsync(model.UserName, model.PassWord, false, false);
-            if (result.Succeeded)
+            var user = await _userManager.FindByNameAsync(model.UserName);
+            if (user == null)
             {
-                return Redirect(model.ReturnUrl);
+                ModelState.AddModelError("CheckYourLogin", _localizer["CheckYourLogin"]);
             }
-            else if (result.IsLockedOut)
+            else
             {
+                await _signInManager.SignOutAsync();
+                //check the model is valid.
+                var result = await _signInManager.PasswordSignInAsync(user, model.PassWord, false, false);
+                if (result.Succeeded)
+                {
+                    var userIsGod = await _userManager.IsInRoleAsync(user, "CourierManageGodMode");
+                    await _userManager.ResetAccessFailedCountAsync(user);
+                    return Redirect(model.ReturnUrl);
+                }
+            }
 
-            }
             return View(model);
         }
         public IActionResult Register(string returnUrl)

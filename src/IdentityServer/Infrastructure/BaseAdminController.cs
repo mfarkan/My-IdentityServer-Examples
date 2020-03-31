@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityServer.Infrastructure
 {
-    [Authorize(Policy = "SuperAdmin")]
+    [Authorize(Roles = "CourierManageGodMode")]
     public class BaseAdminController : Controller
     {
     }

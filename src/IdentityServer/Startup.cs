@@ -53,13 +53,6 @@ namespace IdentityServer
                 config.LogoutPath = "/Auth/LogOut";
                 config.ExpireTimeSpan = TimeSpan.FromMinutes(20);
             });
-            services.AddAuthorization(option =>
-            {
-                option.AddPolicy("SuperAdmin", policy =>
-                {
-                    policy.RequireClaim("SuperAdmin", "true");
-                });
-            });
             services.AddIdentityServer()
                     .AddAspNetIdentity<ApplicationUser>()
                     .AddConfigurationStore(options =>

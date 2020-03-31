@@ -556,7 +556,7 @@ namespace IdentityServer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User notfound..
+        ///   Looks up a localized string similar to User not found..
         /// </summary>
         public static string UserNotFound {
             get {
